@@ -97,7 +97,7 @@ resource "aws_security_group" "http_ssh" {
 
 # 1. Provision the AWS EC2 instance
 resource "aws_instance" "web_server" {
-  ami           = "ami-0a7d80731ae1b2435" # Ubuntu Server 22.04 LTS (HVM)
+  ami           = "ami-0dfc569a8686b9320" # Red Hat Enterprise Linux 9 (HVM)
   instance_type = "t2.large"
   key_name      = var.ssh_key_name
   vpc_security_group_ids = [aws_security_group.allow_http_ssh.id]
@@ -108,7 +108,7 @@ resource "aws_instance" "web_server" {
 
 resource "aws_instance" "web_server" {
   count                     = 5
-  ami                       = "ami-0a7d80731ae1b2435" # Ubuntu Server 22.04 LTS (HVM)
+  ami                       = "ami-0dfc569a8686b9320" # Red Hat Enterprise Linux 9 (HVM)
   instance_type             = "t2.micro"
   key_name                  = var.ssh_key_name
   vpc_security_group_ids    = [aws_security_group.allow_http_ssh.id]
@@ -148,7 +148,7 @@ resource "aap_host" "host" {
   name         = each.value.public_ip
   description  = "Host provisioned by Terraform"
   variables    = jsonencode({
-    ansible_user = "ubuntu"
+    ansible_user = "ec2-user"
   })
   lifecycle {
     action_trigger {
