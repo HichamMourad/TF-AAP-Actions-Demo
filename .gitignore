@@ -1,0 +1,13 @@
+.DS_Store
+terraform.tfvars
+terraform.tfstate
+terraform.tfstate.backup
+.env
+.terraform
+.terraform.lock.hcl
+.devcontainer
+.DS_Store
+.lock
+.vscode/*
+settings.json
+.ansible/*
