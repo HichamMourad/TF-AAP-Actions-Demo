@@ -136,6 +136,7 @@ resource "aap_group" "tfademo" {
 resource "aap_host" "host" {
   for_each     = { for idx, instance in aws_instance.web_server : idx => instance }
   inventory_id = data.aap_inventory.inventory.id
+  groups = toset([resource.aap_group.tfademo.id])
   name         = each.value.public_ip
   description  = "Host provisioned by Terraform"
   variables    = jsonencode({
@@ -157,14 +158,14 @@ output "web_server_public_ips" {
 # This is using a new 'aap_eventstream' data source in the terraform-provider-aap POC
 # The purpose is to look up an EDA Event Stream object by ID so that we know its URL when
 # we want to send an event later.
-data "aap_eventstream" "eventstream" {
-  name = "TF Actions Event Stream"
-}
+#data "aap_eventstream" "eventstream" {
+#  name = "TF Actions Event Stream"
+#}
 
 # Sample output just to show that we looked up the Event Stream URL with the above datasource
-output "event_stream_url" {
-  value = data.aap_eventstream.eventstream.url
-}
+# output "event_stream_url" {
+#  value = data.aap_eventstream.eventstream.url
+#}
 
 # This is using a new 'aap_eventdispatch' action in the terraform-provider-aap POC
 # The purpose is to POST an event with a payload (config) when triggered, and EDA
