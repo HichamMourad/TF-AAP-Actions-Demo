@@ -104,6 +104,7 @@ resource "aws_instance" "web_server" {
   associate_public_ip_address = true
   tags = {
     Name = "hcp-terraform-aap-demo-${count.index + 1}"
+    owner = hmourad
   }
   
   lifecycle {
