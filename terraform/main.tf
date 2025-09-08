@@ -64,10 +64,10 @@ variable "aap_password" {
   sensitive   = true
 }
 
-variable "aap_job_template_id" {
-  description = "The ID of the Job Template in AAP to run"
-  type        = number
-}
+#variable "aap_job_template_id" {
+#  description = "The ID of the Job Template in AAP to run"
+#  type        = number
+#}
 
 resource "aws_security_group" "http_ssh" {
   name        = "web-server-sg"
