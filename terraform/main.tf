@@ -69,7 +69,7 @@ variable "aap_password" {
 #  type        = number
 #}
 
-resource "aws_security_group" "http_ssh" {
+resource "aws_security_group" "allow_http_ssh" {
   name        = "web-server-sg"
   name_prefix = "allow_http_ssh_"
   description = "Allow SSH, HTTP inbound and all outbound traffic"
@@ -93,7 +93,6 @@ resource "aws_security_group" "http_ssh" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
 
 # 1. Provision the AWS EC2 instance(s)
 resource "aws_instance" "web_server" {
