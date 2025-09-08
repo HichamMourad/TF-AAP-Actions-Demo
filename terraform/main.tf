@@ -126,6 +126,12 @@ data "aap_inventory" "inventory" {
   organization_name = "Default"
 }
 
+# Create some infrastructure - inventory group - that has an action tied to it
+resource "aap_group" "tfademo" {
+  name = "tfademo"
+  inventory_id = data.aap_inventory.inventory.id
+}
+
 # Add the new EC2 instance to the inventory
 resource "aap_host" "host" {
   for_each     = { for idx, instance in aws_instance.web_server : idx => instance }
@@ -168,7 +174,7 @@ output "event_stream_url" {
 # TF action to run the new AWS provisioning workflow (after the hosts get added to AAP inventory)
 action "aap_eventdispatch" "create" {
   config {
-    limit = "infra"
+    limit = "tfademo"
     template_type = "workflow"
     job_template_name = "New AWS Provisioning Workflow"
     organization_name = "Default"
@@ -185,7 +191,7 @@ action "aap_eventdispatch" "create" {
 # TF action to run the update AWS provisioning job (after ec2 instance are created)
 action "aap_eventdispatch" "update" {
   config {
-    limit = "infra"
+    limit = "tfademo"
     template_type = "job"
     job_template_name = "Update AWS Provisioning Job"
     organization_name = "Default"
