@@ -113,7 +113,7 @@ resource "aws_instance" "web_server" {
     # on the named lifecycle events: "After creating this resource, run the action"
     action_trigger {
       events  = [after_create]
-      actions = [action.aap_eventdispatch.update]
+      actions = [action.aap_eventdispatch.create]
     }
   }
 }
@@ -145,7 +145,7 @@ resource "aap_host" "host" {
   lifecycle {
     action_trigger {
       events  = [after_create]
-      actions = [action.aap_eventdispatch.create]
+      actions = [action.aap_eventdispatch.update]
     }
   }
 }
@@ -172,11 +172,11 @@ output "web_server_public_ips" {
 # is configured with a rulebook to extract these details out of the config and dispatch
 # a job
 
-# TF action to run the new AWS provisioning workflow (after the hosts get added to AAP inventory)
+# TF action to run the new AWS provisioning workflow (after ec2 instance are created)
 action "aap_eventdispatch" "create" {
   config {
     limit = "tfademo"
-    template_type = "workflow"
+    template_type = "job"
     job_template_name = "New AWS Provisioning Workflow"
     organization_name = "Default"
 
@@ -189,7 +189,7 @@ action "aap_eventdispatch" "create" {
   }
 }
 
-# TF action to run the update AWS provisioning job (after ec2 instance are created)
+# TF action to run the update AWS provisioning job (after the hosts get added to AAP inventory)
 action "aap_eventdispatch" "update" {
   config {
     limit = "tfademo"
