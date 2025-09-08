@@ -71,7 +71,7 @@ variable "aap_password" {
 
 resource "aws_security_group" "allow_http_ssh" {
   name        = "web-server-sg"
-  name_prefix = "allow_http_ssh_"
+#  name_prefix = "allow_http_ssh_"
   description = "Allow SSH, HTTP inbound and all outbound traffic"
 
   ingress {
