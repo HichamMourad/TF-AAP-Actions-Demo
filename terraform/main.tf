@@ -95,17 +95,7 @@ resource "aws_security_group" "http_ssh" {
 }
 
 
-# 1. Provision the AWS EC2 instance
-resource "aws_instance" "web_server" {
-  ami           = "ami-0dfc569a8686b9320" # Red Hat Enterprise Linux 9 (HVM)
-  instance_type = "t2.large"
-  key_name      = var.ssh_key_name
-  vpc_security_group_ids = [aws_security_group.allow_http_ssh.id]
-  tags = {
-    Name = "hcp-terraform-aap-demo"
-  }
-}
-
+# 1. Provision the AWS EC2 instance(s)
 resource "aws_instance" "web_server" {
   count                     = 5
   ami                       = "ami-0dfc569a8686b9320" # Red Hat Enterprise Linux 9 (HVM)
@@ -116,12 +106,7 @@ resource "aws_instance" "web_server" {
   tags = {
     Name = "hcp-terraform-aap-demo-${count.index + 1}"
   }
-  lifecycle {
-    action_trigger {
-      events  = [after_update]
-      actions = [action.aap_eventdispatch.update]
-    }
-  }
+  
   lifecycle {
     # This action triggers syntax new in terraform alpha
     # It configures terraform to run the listed actions based
@@ -180,6 +165,7 @@ output "event_stream_url" {
 # is configured with a rulebook to extract these details out of the config and dispatch
 # a job
 
+# TF action to run the new AWS provisioning workflow (after the hosts get added to AAP inventory)
 action "aap_eventdispatch" "create" {
   config {
     limit = "infra"
@@ -196,6 +182,7 @@ action "aap_eventdispatch" "create" {
   }
 }
 
+# TF action to run the update AWS provisioning job (after ec2 instance are created)
 action "aap_eventdispatch" "update" {
   config {
     limit = "infra"
