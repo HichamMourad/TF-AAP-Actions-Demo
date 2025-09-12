@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 # Configure the AAP provider
-# Using the AAP provider with Actions from Dan Leehr
+# Using the AAP provider with Actions
 terraform {
   required_version = "~> v1.14.0"
   required_providers {
@@ -108,7 +108,7 @@ resource "aws_instance" "web_server" {
   }
   
   lifecycle {
-    # This action triggers syntax new in terraform alpha
+    # This action triggers syntax new in terraform
     # It configures terraform to run the listed actions based
     # on the named lifecycle events: "After creating this resource, run the action"
     action_trigger {
