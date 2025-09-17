@@ -96,7 +96,7 @@ resource "aws_security_group" "allow_http_ssh" {
 
 # 1. Provision the AWS EC2 instance(s)
 resource "aws_instance" "web_server" {
-  count                     = 1
+  count                     = 2
   ami                       = "ami-0dfc569a8686b9320" # Red Hat Enterprise Linux 9 (HVM)
   instance_type             = "t2.micro"
   key_name                  = var.ssh_key_name
@@ -194,7 +194,7 @@ action "aap_eventdispatch" "create" {
 # TF action to run the update AWS provisioning job (after the hosts get added to AAP inventory)
 action "aap_eventdispatch" "update" {
   config {
-    limit = "tfademo"
+    limit = "host"
     template_type = "job"
     job_template_name = "Update AWS Provisioning Job"
     organization_name = "Default"
