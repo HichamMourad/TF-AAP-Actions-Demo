@@ -1,0 +1,26 @@
+---
+- name: Install and configure firewalld on RHEL
+  hosts: all  # This will be overridden by the AAP inventory
+  become: true # Use privilege escalation (sudo) to run the tasks
+
+  tasks:
+    - name: Ensure firewalld is installed (RHEL)
+      ansible.builtin.dnf:
+        name: firewalld
+        state: present
+
+    - name: Configure firewalld
+      ansible.posix.firewalld:
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+        immediate: true
+      loop:
+        - http
+        - https
+
+    - name: Ensure firewalld service is running and enabled (RHEL)
+      ansible.builtin.service:
+        name: firewalld
+        state: started
+        enabled: true
