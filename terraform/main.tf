@@ -141,6 +141,7 @@ resource "aap_host" "host" {
   description  = "Host provisioned by Terraform"
   variables    = jsonencode({
     ansible_user = "ec2-user"
+    public_ip = each.value.public_ip
   })
   lifecycle {
     action_trigger {
