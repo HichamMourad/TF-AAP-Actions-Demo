@@ -9,8 +9,8 @@ terraform {
   required_version = "~> v1.14.0"
   required_providers {
     aap = {
-      source = "dleehr/aap"
-      version = "2.0.0-demo2"
+      source = "ansible/aap"
+      version = "1.4.0-devpreview1"
     }
   }
 }
@@ -113,7 +113,7 @@ resource "aws_instance" "web_server" {
     # on the named lifecycle events: "After creating this resource, run the action"
     action_trigger {
       events  = [after_create]
-      actions = [action.aap_eventdispatch.create]
+      actions = [action.aap_eda_eventstream_post.create]
     }
   }
 }
@@ -147,7 +147,7 @@ resource "aap_host" "host" {
   lifecycle {
     action_trigger {
       events  = [after_create]
-      actions = [action.aap_eventdispatch.update]
+      actions = [action.aap_eda_eventstream_post.update]
     }
   }
 }
@@ -166,7 +166,7 @@ output "web_server_public_ips" {
 
 # Sample output just to show that we looked up the Event Stream URL with the above datasource
 # output "event_stream_url" {
-#  value = data.aap_eventstream.eventstream.url
+#  value = data.aap_eda_eventstream.eventstream.url
 #}
 
 # This is using a new 'aap_eventdispatch' action in the terraform-provider-aap POC
@@ -175,7 +175,7 @@ output "web_server_public_ips" {
 # a job
 
 # TF action to run the new AWS provisioning workflow (after ec2 instance are created)
-action "aap_eventdispatch" "create" {
+action "aap_eda_eventstream_post" "create" {
   config {
     limit = "tfademo"
     template_type = "job"
@@ -192,7 +192,7 @@ action "aap_eventdispatch" "create" {
 }
 
 # TF action to run the update AWS provisioning job (after the hosts get added to AAP inventory)
-action "aap_eventdispatch" "update" {
+action "aap_eda_eventstream_post" "update" {
   config {
     limit = "tfademo"
     template_type = "job"
